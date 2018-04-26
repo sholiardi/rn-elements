@@ -1,50 +1,131 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { FormLabel, FormInput, Button, CheckBox } from 'react-native-elements';
+
+import {
+  StyleSheet, View,
+  ScrollView, Text
+} from 'react-native';
+
+import {
+  FormLabel, FormInput,
+  Button, CheckBox,
+  FormValidationMessage, Header,
+  Icon, List,
+  ListItem
+} from 'react-native-elements';
+
+import SlidingUpPanel from 'rn-sliding-up-panel';
+
+const list = [
+  {
+    title: 'Food',
+    icon: 'food',
+    type: 'material-community'
+  },
+  {
+    title: 'Travel',
+    icon: 'flight-takeoff',
+    type: 'material'
+  }
+]
 
 export default class App extends Component<Props> {
+
+  state = {
+    visible: false
+  }
+
   render() {
+
     return (
-      <View style={styles.container}>
+      <ScrollView keyboardShouldPersistTaps='handled'>
+        <View style={styles.container}>
 
-        <FormLabel>Type</FormLabel>
-        <CheckBox
-          title="Income"
-          checkedIcon="dot-circle-o"
-          uncheckedIcon="circle-o"
-          checked={true}>
-        </CheckBox>
-        <CheckBox
-          title="Expense"
-          checkedIcon="dot-circle-o"
-          uncheckedIcon="circle-o"
-          checked={false}
-          containerStyle={styles.element}>
-        </CheckBox>
+          <Header
+            leftComponent={{ icon: 'menu', color: '#fff' }}
+            centerComponent={{ text: 'Transaction', style: { color: '#fff' } }}
+            rightComponent={{ icon: 'home', color: '#fff' }} />
 
-        <FormLabel>Name</FormLabel>
-        <FormInput
-          containerStyle={styles.element}
-          placeholder="Your transaction name" />
+          <FormLabel>Type</FormLabel>
+          <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+            <CheckBox
+              title="Income"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={true}>
+            </CheckBox>
+            <CheckBox
+              title="Expense"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={false}
+              containerStyle={styles.element}>
+            </CheckBox>
+          </View>
 
-        <FormLabel>Amount</FormLabel>
-        <FormInput
-          containerStyle={styles.element}
-          placeholder="Your transaction amount" />
+          <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+            <FormLabel containerStyle={{ marginBottom: 15 }}>Category</FormLabel>
+            <Button
+              buttonStyle={{
+                backgroundColor: "rgba(92, 99,216, 1)",
+                width: 100,
+                height: 45,
+                borderColor: "transparent",
+                borderWidth: 0,
+                borderRadius: 5
+              }}
+              iconRight={{ name: 'list', type: 'font-awesome', style: { marginRight: 10, fontSize: 15 } }}
+              onPress={() => this.setState({visible: true})}
+            />
+          </View>
 
-        <Button title="Submit" />
+          <FormLabel>Name</FormLabel>
+          <FormInput placeholder="Your transaction name" />
+          <FormValidationMessage containerStyle={styles.element}>{'This field is required'}</FormValidationMessage>
 
-      </View>
+          <FormLabel>Amount</FormLabel>
+          <FormInput placeholder="Your transaction amount" />
+          <FormValidationMessage containerStyle={styles.element}>{'This field is required'}</FormValidationMessage>
+
+          <Button title="Submit" />
+
+        </View>
+
+        <SlidingUpPanel
+          visible={this.state.visible}
+          onRequestClose={() => this.setState({visible: false})}>
+          <View style={styles.slider}>
+
+            <List containerStyle={{marginBottom: 20, width: '100%'}}>
+            {
+              list.map((item, i) => (
+                <ListItem
+                  key={i}
+                  title={item.title}
+                  leftIcon={{name: item.icon, type: item.type}}
+                  onPress={() => this.setState({visible: false})}
+                />
+              ))
+            }
+            </List>
+
+          </View>
+        </SlidingUpPanel>
+
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 20
+    flex: 1
   },
   element: {
     marginBottom: 30
+  },
+  slider: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center'
   }
 });
