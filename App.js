@@ -9,9 +9,10 @@ import {
   FormLabel, FormInput,
   Button, CheckBox,
   FormValidationMessage, Header,
-  Icon, List,
-  ListItem
+  Icon, List, ListItem
 } from 'react-native-elements';
+
+import { Col, Row, Grid } from "react-native-easy-grid";
 
 import SlidingUpPanel from 'rn-sliding-up-panel';
 
@@ -24,6 +25,11 @@ const list = [
   {
     title: 'Travel',
     icon: 'flight-takeoff',
+    type: 'material'
+  },
+  {
+    title: 'Health',
+    icon: 'local-hospital',
     type: 'material'
   }
 ]
@@ -57,25 +63,54 @@ export default class App extends Component<Props> {
               title="Expense"
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
-              checked={false}
-              containerStyle={styles.element}>
+              checked={false}>
             </CheckBox>
           </View>
 
-          <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+          <View style={styles.element} hidden={true}>
             <FormLabel containerStyle={{ marginBottom: 15 }}>Category</FormLabel>
+
             <Button
+              title="Choose a category"
               buttonStyle={{
+                width: 230,
                 backgroundColor: "rgba(92, 99,216, 1)",
-                width: 100,
-                height: 45,
                 borderColor: "transparent",
                 borderWidth: 0,
                 borderRadius: 5
               }}
-              iconRight={{ name: 'list', type: 'font-awesome', style: { marginRight: 10, fontSize: 15 } }}
+              leftIcon={{ name: 'list', type: 'font-awesome', style: { marginRight: 10, fontSize: 15 } }}
               onPress={() => this.setState({visible: true})}
             />
+
+            <Grid>
+              <Col alignItems="center">
+                <Icon
+                  reverse
+                  name='food'
+                  type='material-community'
+                  color='#517fa4'
+                />
+              </Col>
+              <Col alignItems="center">
+                <Icon
+                  reverse
+                  name='flight-takeoff'
+                  type='material'
+                  color='#517fa4'
+                />
+              </Col>
+              <Col alignItems="center">
+                <Icon
+                  reverse
+                  name='local-hospital'
+                  type='material'
+                  color='#517fa4'
+                />
+              </Col>
+              <Col alignItems="center"></Col>
+              <Col alignItems="center"></Col>
+            </Grid>
           </View>
 
           <FormLabel>Name</FormLabel>
@@ -94,8 +129,8 @@ export default class App extends Component<Props> {
           visible={this.state.visible}
           onRequestClose={() => this.setState({visible: false})}>
           <View style={styles.slider}>
-
-            <List containerStyle={{marginBottom: 20, width: '100%'}}>
+            <Text style={{paddingTop: 20, fontSize: 16}}>Choose a category</Text>
+            <List containerStyle={{marginBottom: 10, width: '100%'}}>
             {
               list.map((item, i) => (
                 <ListItem
@@ -121,7 +156,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   element: {
-    marginBottom: 30
+    marginBottom: 20
   },
   slider: {
     flex: 1,
